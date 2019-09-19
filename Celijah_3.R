@@ -37,7 +37,7 @@
   add.constraint(lprec, c(0, 0, 0, 1, 1, 1, 0, 0, 0), "<=", 1200)
   add.constraint(lprec, c(0, 0, 0, 0, 0, 0, 1, 1, 1), "<=", 750)
   add.constraint(lprec, c(0, +0, +0, +900, + 900,  + 900, - 750, - 750, - 750), "<=", 0)
-  add.constraint(lprec, c((1/450), + 450,  + 450, +0, +0, +0,- (1/750), - 750, - 750), "<=", 0)
+  add.constraint(lprec, c(450, + 450,  + 450, +0, +0, +0,- 750, - 750, - 750), "<=", 0)
   
   
   # To identify the variables and constraints, we can set variable names and name the constraints
