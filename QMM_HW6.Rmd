@@ -1,0 +1,168 @@
+---
+title: "QMM_HW6"
+author: "Celijah"
+date: "10/31/2019"
+output: html_document
+---
+
+```{r}
+library(lpSolveAPI)
+library(ucminf)
+library(Benchmarking)
+```
+
+1)	Formulation of DEA analysis 
+```{r}
+input <- matrix(c(150,400,320,520,350,320, 0.2, 0.7, 1.2, 2.0, 1.2, 0.7),ncol = 2)
+output <- matrix(c(14000,14000,42000,28000,19000, 14000, 3500,21000,10500,42000,25000,15000), ncol= 2)
+
+colnames(input) <- c("Staff Hours Per Day", "Supplies Per Day")
+colnames(output) <- c("Reimbursed Patient-Days", "Privately Paid Patient-Days")
+```
+
+1. Perform DEA analysis by under all DEA assumptions of FDH, CRS, VRS, IRS, DRS, and FRH.
+2. Determine the Peers and Lambdas under each of the above assumptions
+3. Summarize your results in a tabular format.
+4. Compare and contrast the above results
+
+##FDH
+
+```{r}
+fdh <- dea(input, output, RTS = "fdh") 
+fdh
+
+peers(fdh)
+lambda(fdh)
+```
+
+```{r}
+dea.plot(input, output, RTS = "fdh")
+```
+
+##CRS
+
+```{r}
+crs <- dea(input, output, RTS = "crs") 
+crs
+
+peers(crs)
+lambda(crs)
+```
+
+```{r}
+dea.plot(input, output, RTS = "crs")
+```
+
+##VRS
+
+```{r}
+vrs <- dea(input, output, RTS = "vrs") 
+vrs
+
+peers(vrs)
+lambda(vrs)
+```
+
+```{r}
+dea.plot(input, output, RTS = "vrs")
+```
+
+##IRS
+
+```{r}
+irs <- dea(input, output, RTS = "irs") 
+irs
+
+peers(irs)
+lambda(irs)
+```
+
+```{r}
+dea.plot(input, output, RTS = "irs")
+```
+
+##DRS
+
+```{r}
+drs <- dea(input, output, RTS = "drs") 
+irs
+
+peers(drs)
+lambda(drs)
+```
+
+```{r}
+dea.plot(input, output, RTS = "drs")
+```
+
+##FRH or FDH
+
+```{r}
+fdh <- dea(input, output, RTS = "fdh") 
+fdh
+
+peers(fdh)
+lambda(fdh)
+```
+
+```{r}
+dea.plot(input, output, RTS = "fdh")
+```
+
+
+##Problem 2: Goal Programming
+
+1)	Define y1+ and y1-, respectively, as the amount over (if any) and the amount under (if any) the employment level goal. Define y2+ and y2- in the same way for the goal regarding earnings next year. Define x1, x2, and x3 as the production rates of Products 1, 2, and 3, respectively. With these definitions, use the goal programming technique to express y1+, y1- , y2+ and y2-  algebraically in terms of x1, x2, and x3. Also express P in terms of x1, x2, and x3.
+2)	Express managements objective function in terms of x1, x2, x3, y1+, y1- , y2+ and y2-.
+3)	Formulate and solve the linear programming model. What are your findings?
+
+
+```{r}
+library("lpSolveAPI")
+```
+
+With M = 1000, mutiply 2 in  '2 y2n' with 1000 to give 2000
+the same goes for '3 y3p'
+
+```
+min: 5 y1n + 2000 y2p + 4 y2n + 3000 y3p;
+
+
+12 x1 + 9 x2 + 15 x3 - y1p + y1n = 125;
+5 x1 + 3 x2 + 4 x3 - y2p + y2n = 40;
+5 x1 + 7 x2 + 8 x3 - y3p +  y3n = 55;
+
+x1 >= 0;
+x2 >= 0;
+x3 >= 0;
+
+y1p >= 0;
+y2p >= 0;
+y3p >= 0;
+
+y1n >= 0;
+y2n >= 0;
+y3n >= 0;
+```
+```{r}
+gp <- read.lp("gp_celijah.lp")
+
+gp
+```
+
+```{r}
+solve(gp)
+```
+
+```{r}
+get.objective(gp)
+```
+
+```{r}
+vars <- get.variables(gp)
+
+names(vars) <- c("y1n", "y2p", "y2n", "y3p", "x1" ,"x2", "x3", "y1p", "y3n")
+
+vars
+```
+
